@@ -1,4 +1,10 @@
-import { Bell, CaretDown, ChatCircleDots, MagnifyingGlass, Plus } from "@phosphor-icons/react";
+import {
+  Bell,
+  CaretDown,
+  ChatCircleDots,
+  MagnifyingGlass,
+  Plus,
+} from "@phosphor-icons/react";
 import logo from "./assets/logo.svg";
 import { useEffect, useState } from "react";
 
@@ -8,12 +14,13 @@ const clientID = `?client_id=${ACCESS_KEY}`;
 const mainUrl = `https://api.unsplash.com/photos/`;
 const searchUrl = `https://api.unsplash.com/search/photos/`;
 
-
 function App() {
   const [loading, setLoading] = useState<boolean>(false);
   const [photos, setPhotos] = useState<any[]>([]);
   const [page, setPage] = useState<number>(0);
   const [query, setQuery] = useState<string>("");
+
+  const [noImagesMessage, setNoImagesMessage] = useState("");
 
   useEffect(() => {
     fetchImages();
@@ -34,15 +41,20 @@ function App() {
       const response = await fetch(url);
       const data = await response.json();
       console.log("data", data);
-      setPhotos((oldPhotos) => {
-        if (query && page === 1) {
-          return data.results;
-        } else if (query) {
-          return [...oldPhotos, ...data.results];
-        } else {
-          return [...oldPhotos, ...data];
-        }
-      });
+      if (data.results && data.results.length === 0) {
+        setNoImagesMessage("No images found. Please redo your search again.");
+      } else {
+        setNoImagesMessage("");
+        setPhotos((oldPhotos) => {
+          if (query && page === 1) {
+            return data.results;
+          } else if (query) {
+            return [...oldPhotos, ...data.results];
+          } else {
+            return [...oldPhotos, ...data];
+          }
+        });
+      }
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -50,12 +62,15 @@ function App() {
     }
   };
 
+
   useEffect(() => {
     const handleScroll = () => {
       if (
         !loading &&
         window.innerHeight + window.scrollY >=
-          (document.documentElement.scrollHeight || document.body.scrollHeight) - 2
+          (document.documentElement.scrollHeight ||
+            document.body.scrollHeight) -
+            2
       ) {
         setPage((oldPage) => oldPage + 1);
       }
@@ -139,15 +154,19 @@ function App() {
               placeholder="Search here..."
               className="w-full px-4 outline-none h-full rounded-s-md"
             />
-            <button onClick={handleSubmit} className="px-5 py-3 bg-[#DA2F2F] rounded-e-md">
+            <button
+              onClick={handleSubmit}
+              className="px-5 py-3 bg-[#DA2F2F] rounded-e-md"
+            >
               <MagnifyingGlass color="white" size={30} />
             </button>
           </div>
+          {noImagesMessage && <p>{noImagesMessage}</p>}
         </div>
 
         <div className="flex items-center justify-center mt-[105px] gap-[50px]">
           <div className="text-center mb-[110px]">
-            <div className="mb-2 w-[208px] border border-[#F07474] h-[110px] rounded-md  bg-white p-2">
+            <div className="mb-2 w-[208px] border border-[#F07474] h-[110px] rounded-md bg-white p-2">
               <img
                 className="w-full h-full object-cover rounded-md"
                 src="https://source.unsplash.com/random/?forest"
@@ -157,7 +176,7 @@ function App() {
             <span>Image the florest</span>
           </div>
           <div className="text-center mb-[110px]">
-            <div className="mb-2 w-[208px] border border-[#F07474] h-[110px] rounded-md  bg-white p-2">
+            <div className="mb-2 w-[208px] border border-[#F07474] h-[110px] rounded-md bg-white p-2">
               <img
                 className="w-full h-full object-cover rounded-md"
                 src="https://source.unsplash.com/random/?city,night"
@@ -167,7 +186,7 @@ function App() {
             <span>Image The Night City</span>
           </div>
           <div className="text-center mb-[110px]">
-            <div className="mb-2 w-[208px] border border-[#F07474] h-[110px] rounded-md  bg-white p-2">
+            <div className="mb-2 w-[208px] border border-[#F07474] h-[110px] rounded-md bg-white p-2">
               <img
                 className="w-full h-full object-cover rounded-md"
                 src="https://source.unsplash.com/random/?abstract"
@@ -177,7 +196,7 @@ function App() {
             <span>Image Abstract</span>
           </div>
           <div className="text-center mb-[110px]">
-            <div className="mb-2 w-[208px] border border-[#F07474] h-[110px] rounded-md  bg-white p-2">
+            <div className="mb-2 w-[208px] border border-[#F07474] h-[110px] rounded-md bg-white p-2">
               <img
                 className="w-full h-full object-cover rounded-md"
                 src="https://source.unsplash.com/random/?universe"
@@ -186,9 +205,9 @@ function App() {
             </div>
             <span>Image The Universe</span>
           </div>
-          
+
           <div className="text-center mb-[110px]">
-            <div className="mb-2 w-[208px] border border-[#F07474] h-[110px] rounded-md  bg-white p-2">
+            <div className="mb-2 w-[208px] border border-[#F07474] h-[110px] rounded-md bg-white p-2">
               <img
                 className="w-full h-full object-cover rounded-md"
                 src="https://source.unsplash.com/random/?ice"
@@ -201,18 +220,18 @@ function App() {
       </div>
 
       <div className="px-[102px]">
-      {photos.map((image, index) => (
-          <div key={index} className="col-md-4">
-              cover={
-                <img
-                  src={image.urls.regular}
-                  alt="Image"
-                  style={{ height: "150px", objectFit: "cover" }}
-                />
-              }
-         
-          </div>
-        ))}
+        <div style={{ columns: 5 }} className="mt-4">
+          {photos.map((image, index) => (
+            <div key={index} className="my-4">
+              <img
+                src={image.urls.regular}
+                alt="Image"
+                className="w-full h-full rounded-md object-cover"
+                loading="lazy"
+              />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
