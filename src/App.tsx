@@ -1,21 +1,34 @@
 import { Bell, CaretDown, ChatCircleDots, MagnifyingGlass, Plus } from "@phosphor-icons/react";
 import logo from "./assets/logo.svg";
 import ImageGrid from "./components/imageGrid";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { fetchRandomImages } from "./utils/unplashService";
 
 function App() {
 
   const [images, setImages] = useState<string[]>([]);
+  const [loadedImagesCount, setLoadedImagesCount] = useState(0);
+  const loaderRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const fetchImages = async () => {
-      const imageUrls = await fetchRandomImages();
-      setImages(imageUrls);
+    const loadImages = async () => {
+      const newImages = await fetchRandomImages(10); // Carrega 10 imagens de uma vez
+      setImages(prevImages => [...prevImages, ...newImages]);
+      setLoadedImagesCount(prevCount => prevCount + 10);
     };
-    fetchImages();
-  }, []);
 
+    const handleScroll = () => {
+      if (
+        loaderRef.current &&
+        window.innerHeight + window.scrollY >= loaderRef.current.offsetTop
+      ) {
+        loadImages();
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [loadedImagesCount]);
 
   return (
     <div>
@@ -147,6 +160,7 @@ function App() {
 
       <div className="px-[102px]">
       <ImageGrid images={images.map((url, index) => ({ url, alt: `Imagem ${index}`, description: '' }))} />
+      <div ref={loaderRef}></div>
       </div>
     </div>
   );

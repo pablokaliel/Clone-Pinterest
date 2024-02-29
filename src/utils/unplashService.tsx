@@ -1,7 +1,4 @@
-
-
 const ACCESS_KEY = "U8Bxt5JZkkxsMaYHIEBwGhsZCOnwoL_gOv8br_pKS9U";
-const COUNT = 78;
 
 interface UnsplashImage {
   urls: {
@@ -9,10 +6,10 @@ interface UnsplashImage {
   };
 }
 
-export const fetchRandomImages = async (): Promise<string[]> => {
+export const fetchRandomImages = async (count: number): Promise<string[]> => {
   try {
     const response = await fetch(
-      `https://api.unsplash.com/photos/random?client_id=${ACCESS_KEY}&count=${COUNT}`
+      `https://api.unsplash.com/photos/random?client_id=${ACCESS_KEY}&count=${count}`
     );
     const data: UnsplashImage[] = await response.json();
     const imageUrls: string[] = data.map(photo => photo.urls.regular);
