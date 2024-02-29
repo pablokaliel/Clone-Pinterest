@@ -1,35 +1,75 @@
 import { Bell, CaretDown, ChatCircleDots, MagnifyingGlass, Plus } from "@phosphor-icons/react";
 import logo from "./assets/logo.svg";
-import ImageGrid from "./components/imageGrid";
-import { useEffect, useRef, useState } from "react";
-import { fetchRandomImages } from "./utils/unplashService";
+import { useEffect, useState } from "react";
+
+const ACCESS_KEY = "U8Bxt5JZkkxsMaYHIEBwGhsZCOnwoL_gOv8br_pKS9U";
+
+const clientID = `?client_id=${ACCESS_KEY}`;
+const mainUrl = `https://api.unsplash.com/photos/`;
+const searchUrl = `https://api.unsplash.com/search/photos/`;
+
 
 function App() {
-
-  const [images, setImages] = useState<string[]>([]);
-  const [loadedImagesCount, setLoadedImagesCount] = useState(0);
-  const loaderRef = useRef<HTMLDivElement>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [photos, setPhotos] = useState<any[]>([]);
+  const [page, setPage] = useState<number>(0);
+  const [query, setQuery] = useState<string>("");
 
   useEffect(() => {
-    const loadImages = async () => {
-      const newImages = await fetchRandomImages(10); // Carrega 10 imagens de uma vez
-      setImages(prevImages => [...prevImages, ...newImages]);
-      setLoadedImagesCount(prevCount => prevCount + 10);
-    };
+    fetchImages();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page]);
 
+  const fetchImages = async () => {
+    setLoading(true);
+    let url;
+    const urlPage = `&page=${page}`;
+    const urlQuery = `&query=${query}`;
+    if (query) {
+      url = `${searchUrl}${clientID}${urlPage}${urlQuery}`;
+    } else {
+      url = `${mainUrl}${clientID}${urlPage}`;
+    }
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      console.log("data", data);
+      setPhotos((oldPhotos) => {
+        if (query && page === 1) {
+          return data.results;
+        } else if (query) {
+          return [...oldPhotos, ...data.results];
+        } else {
+          return [...oldPhotos, ...data];
+        }
+      });
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     const handleScroll = () => {
       if (
-        loaderRef.current &&
-        window.innerHeight + window.scrollY >= loaderRef.current.offsetTop
+        !loading &&
+        window.innerHeight + window.scrollY >=
+          (document.documentElement.scrollHeight || document.body.scrollHeight) - 2
       ) {
-        loadImages();
+        setPage((oldPage) => oldPage + 1);
       }
     };
 
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [loadedImagesCount]);
 
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [loading]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setPage(1);
+  };
   return (
     <div>
       <div className="bg-[#FAE3E3] flex flex-col justify-center">
@@ -93,11 +133,13 @@ function App() {
           </span>
           <div className="mt-14 flex w-[764px] h-[61px]">
             <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
               type="text"
               placeholder="Search here..."
               className="w-full px-4 outline-none h-full rounded-s-md"
             />
-            <button className="px-5 py-3 bg-[#DA2F2F] rounded-e-md">
+            <button onClick={handleSubmit} className="px-5 py-3 bg-[#DA2F2F] rounded-e-md">
               <MagnifyingGlass color="white" size={30} />
             </button>
           </div>
@@ -159,8 +201,18 @@ function App() {
       </div>
 
       <div className="px-[102px]">
-      <ImageGrid images={images.map((url, index) => ({ url, alt: `Imagem ${index}`, description: '' }))} />
-      <div ref={loaderRef}></div>
+      {photos.map((image, index) => (
+          <div key={index} className="col-md-4">
+              cover={
+                <img
+                  src={image.urls.regular}
+                  alt="Image"
+                  style={{ height: "150px", objectFit: "cover" }}
+                />
+              }
+         
+          </div>
+        ))}
       </div>
     </div>
   );
