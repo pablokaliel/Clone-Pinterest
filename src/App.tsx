@@ -1,10 +1,4 @@
-import {
-  Bell,
-  CaretDown,
-  ChatCircleDots,
-  MagnifyingGlass,
-  Plus,
-} from "@phosphor-icons/react";
+import { Bell, CaretDown, ChatCircleDots, MagnifyingGlass, Plus } from "@phosphor-icons/react";
 import logo from "./assets/logo.svg";
 import { useEffect, useState } from "react";
 
@@ -40,7 +34,6 @@ function App() {
     try {
       const response = await fetch(url);
       const data = await response.json();
-      console.log("data", data);
       if (data.results && data.results.length === 0) {
         setNoImagesMessage("No images found. Please redo your search again.");
       } else {
@@ -87,7 +80,7 @@ function App() {
   };
   return (
     <div>
-      <div className="bg-[#FAE3E3] flex flex-col justify-center">
+      <div className="bg-header-bg flex flex-col justify-center">
         <header className="py-16 flex justify-around">
           <div className="flex items-center gap-2">
             <img src={logo} alt="" />
@@ -112,19 +105,19 @@ function App() {
             <div className="flex items-center gap-6 ml-[86px]">
               <div className="flex gap-3">
                 <div className="relative">
-                  <div className="p-[1.5px] top-1 right-1 bg-[#fae3e3] absolute rounded-full ">
+                  <div className="p-[1.5px] top-1 right-1 bg-header-bg absolute rounded-full ">
                     <div className="w-2 h-2 bg-red-500 rounded-full" />
                   </div>
-                  <Bell size={32} weight="fill" color="#989898" />
+                  <Bell size={32} weight="fill" className="text-icons-color" />
                 </div>
                 <div className="relative">
-                  <div className="p-[1.5px] top-1 right-1 bg-[#fae3e3] absolute rounded-full ">
+                  <div className="p-[1.5px] top-1 right-1 bg-header-bg absolute rounded-full ">
                     <div className="w-2 h-2 bg-red-500 rounded-full" />
                   </div>
-                  <ChatCircleDots size={32} weight="fill" color="#989898" />
+                  <ChatCircleDots size={32} weight="fill" className="text-icons-color" />
                 </div>
               </div>
-              <button className="px-4 py-3 bg-[#E60023] text-white flex gap-3 items-center justify-center rounded-lg">
+              <button className="px-4 py-3 bg-button-bg text-white flex gap-3 items-center justify-center rounded-lg">
                 <Plus weight="bold" size={12} />
                 Create
               </button>
@@ -140,7 +133,7 @@ function App() {
         </header>
 
         <div className="flex items-center flex-col justify-center">
-          <div className="text-[#DA2F2F] gap-1 text-[96px] flex items-center">
+          <div className="text-title-color gap-1 text-[96px] flex items-center">
             <h1 className="text-black flex items-center">Expand </h1>Your Mind
           </div>
           <span className="text-3xl font-extralight">
@@ -156,7 +149,7 @@ function App() {
             />
             <button
               onClick={handleSubmit}
-              className="px-5 py-3 bg-[#DA2F2F] rounded-e-md"
+              className="px-5 py-3 bg-button-bg rounded-e-md"
             >
               <MagnifyingGlass color="white" size={30} />
             </button>
@@ -166,7 +159,7 @@ function App() {
 
         <div className="flex items-center justify-center mt-[105px] gap-[50px]">
           <div className="text-center mb-[110px]">
-            <div className="mb-2 w-[208px] border border-[#F07474] h-[110px] rounded-md bg-white p-2">
+            <div className="mb-2 w-[208px] border border-border-color h-[110px] rounded-md bg-white p-2">
               <img
                 className="w-full h-full object-cover rounded-md"
                 src="https://source.unsplash.com/random/?forest"
@@ -176,7 +169,7 @@ function App() {
             <span>Image the florest</span>
           </div>
           <div className="text-center mb-[110px]">
-            <div className="mb-2 w-[208px] border border-[#F07474] h-[110px] rounded-md bg-white p-2">
+            <div className="mb-2 w-[208px] border border-border-color h-[110px] rounded-md bg-white p-2">
               <img
                 className="w-full h-full object-cover rounded-md"
                 src="https://source.unsplash.com/random/?city,night"
@@ -186,7 +179,7 @@ function App() {
             <span>Image The Night City</span>
           </div>
           <div className="text-center mb-[110px]">
-            <div className="mb-2 w-[208px] border border-[#F07474] h-[110px] rounded-md bg-white p-2">
+            <div className="mb-2 w-[208px] border border-border-color h-[110px] rounded-md bg-white p-2">
               <img
                 className="w-full h-full object-cover rounded-md"
                 src="https://source.unsplash.com/random/?abstract"
@@ -196,7 +189,7 @@ function App() {
             <span>Image Abstract</span>
           </div>
           <div className="text-center mb-[110px]">
-            <div className="mb-2 w-[208px] border border-[#F07474] h-[110px] rounded-md bg-white p-2">
+            <div className="mb-2 w-[208px] border border-border-color h-[110px] rounded-md bg-white p-2">
               <img
                 className="w-full h-full object-cover rounded-md"
                 src="https://source.unsplash.com/random/?universe"
@@ -207,7 +200,7 @@ function App() {
           </div>
 
           <div className="text-center mb-[110px]">
-            <div className="mb-2 w-[208px] border border-[#F07474] h-[110px] rounded-md bg-white p-2">
+            <div className="mb-2 w-[208px] border border-border-color h-[110px] rounded-md bg-white p-2">
               <img
                 className="w-full h-full object-cover rounded-md"
                 src="https://source.unsplash.com/random/?ice"
@@ -222,7 +215,7 @@ function App() {
       <div className="px-[102px]">
         <div style={{ columns: 5 }} className="mt-4">
           {photos.map((image, index) => (
-            <div key={index} className="my-4">
+            <div key={index} className="mb-4">
               <img
                 src={image.urls.regular}
                 alt="Image"

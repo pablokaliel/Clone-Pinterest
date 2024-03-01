@@ -14,7 +14,7 @@ const ImageGrid: React.FC<Props> = ({ images }) => {
   return (
     <div
       style={{ columns: 5, display: "inline-block", textAlign: "center" }}
-      className="my-4"
+      className=""
     >
       {images.map((image, index) => (
         <div key={index} className="relative mb-4 ">
