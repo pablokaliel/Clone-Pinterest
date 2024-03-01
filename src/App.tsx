@@ -26,7 +26,7 @@ function App() {
     let url;
     const urlPage = `&page=${page}`;
     const urlQuery = `&query=${query}`;
-    if (query) {
+    if (query !== '') {
       url = `${searchUrl}${clientID}${urlPage}${urlQuery}`;
     } else {
       url = `${mainUrl}${clientID}${urlPage}`;
@@ -34,6 +34,11 @@ function App() {
     try {
       const response = await fetch(url);
       const data = await response.json();
+       
+      if (query === '' && data.results) {
+        return setPhotos(data.results)
+      }
+
       if (data.results && data.results.length === 0) {
         setNoImagesMessage("No images found. Please redo your search again.");
       } else {
