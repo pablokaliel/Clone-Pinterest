@@ -21,6 +21,32 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        !loading &&
+        window.innerHeight + window.scrollY >=
+          (document.documentElement.scrollHeight ||
+            document.body.scrollHeight) -
+            2
+      ) {
+        setPage((oldPage) => oldPage + 1);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [loading]);
+
+  useEffect(() => {
+    if (query === "") {
+      // Reset photos if query is empty
+      setPhotos([]);
+      setPage(0); // Reset page to initial state
+    }
+  }, [query]);
+
   const fetchImages = async () => {
     setLoading(true);
     let url;
@@ -60,29 +86,11 @@ function App() {
     }
   };
 
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (
-        !loading &&
-        window.innerHeight + window.scrollY >=
-          (document.documentElement.scrollHeight ||
-            document.body.scrollHeight) -
-            2
-      ) {
-        setPage((oldPage) => oldPage + 1);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [loading]);
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setPage(1);
   };
+  
   return (
     <div>
       <div className="bg-header-bg flex flex-col justify-center">
