@@ -142,7 +142,14 @@ function App() {
           <div className="mt-14 flex w-[764px] h-[61px]">
             <input
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={async (e) => {
+                setQuery(e.target.value) 
+                
+                 if (e.target.value === '') {
+                    await fetchImages()
+                  }}
+             }
+              
               type="text"
               placeholder="Search here..."
               className="w-full px-4 outline-none h-full rounded-s-md"
