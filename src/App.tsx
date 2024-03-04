@@ -1,4 +1,4 @@
-import { Bell, CaretDown, ChatCircleDots, List, MagnifyingGlass, Plus } from "@phosphor-icons/react";
+import { Bell, CaretDown, ChatCircleDots, DotsThree, DownloadSimple, List, MagnifyingGlass, Plus } from "@phosphor-icons/react";
 import logo from "./assets/logo.svg";
 import { useEffect, useState } from "react";
 
@@ -96,7 +96,7 @@ function App() {
         <header className="py-16 max-md:justify-between align-center flex justify-around">
           <div className="flex items-center gap-2">
             <img src={logo} alt="" />
-            <h1 className="font-bold">Pinterest</h1>
+            <h1 className="font-bold">Pinboard</h1>
           </div>
           <div className="flex max-md:hidden justify-between items-center">
             <ul className="flex text-sm items-center gap-9">
@@ -156,8 +156,8 @@ function App() {
               </div>
             </div>
           </div>
-          <div className="flex items-center max-md:block">
-          <List weight="bold"/>
+          <div className="hidden items-center max-md:flex">
+            <List weight="bold" size={32} />
           </div>
         </header>
 
@@ -185,7 +185,10 @@ function App() {
               onClick={handleSubmit}
               className="px-5 py-3 flex items-center justify-center bg-button-bg rounded-e-md"
             >
-              <MagnifyingGlass color="white" className="w-[30px] h-[30px] max-md:w-[20px]" />
+              <MagnifyingGlass
+                color="white"
+                className="w-[30px] h-[30px] max-md:w-[20px]"
+              />
             </button>
           </div>
           {noImagesMessage && <p>{noImagesMessage}</p>}
@@ -247,15 +250,28 @@ function App() {
       </div>
 
       <div className="px-[102px] max-md:px-4">
-        <div  className="mt-4 columns-5 max-md:columns-2">
+        <div className="mt-4 columns-5 max-md:columns-2">
           {photos.map((image, index) => (
-            <div key={index} className="mb-4">
+            <div key={index} className="mb-4 group overflow-hidden relative">
               <img
                 src={image.urls.regular}
                 alt="Image"
-                className="w-full h-full rounded-md object-cover"
+                className="w-full group-hover:brightness-50 transition-all duration-200 h-full rounded-md object-cover "
                 loading="lazy"
               />
+              <div className="absolute -translate-y-[500px] group-hover:-translate-y-[0px] transition-transform duration-200 right-2 top-2 z-10">
+                <button className="px-3 py-2 bg-button-bg text-white flex gap-3 items-center justify-center rounded-full">
+                  Salvar
+                </button>
+              </div>
+              <div className="absolute flex gap-2 bottom-2 right-2 z-10 translate-x-[500px] group-hover:translate-x-[0px] transition-transform duration-200 ">
+                <button className="px-2 py-2 bg-white hover:bg-white/70 transition-all duration-200 text-black flex items-center justify-center rounded-full">
+                  <DownloadSimple />
+                </button>
+                <button className="px-2 py-2 bg-white hover:bg-white/70 transition-all duration-200 text-black flex items-center justify-center rounded-full">
+                  <DotsThree />
+                </button>
+              </div>
             </div>
           ))}
         </div>
