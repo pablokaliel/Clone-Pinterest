@@ -6,7 +6,7 @@ interface HeaderProps {
 
 export function HeaderComponents({ logo }: HeaderProps) {
   return (
-    <header className="py-16 max-md:justify-between align-center flex justify-around">
+    <header className="py-16 bg-header-bg max-md:justify-between align-center flex justify-around">
       <div className="flex items-center gap-2">
         <img src={logo} alt="" />
         <h1 className="font-bold">Pinboard</h1>
@@ -29,13 +29,13 @@ export function HeaderComponents({ logo }: HeaderProps) {
           <li className="font-extralight hover:font-normal transition-all cursor-pointer">
             PSD
           </li>
-          <li className="flex items-center font-extralight hover:font-normal transition-all cursor-pointer">
+          <li className="flex  items-center font-extralight duration-300 group hover:font-normal transition-all cursor-pointer">
             Categories
-            <CaretDown weight="fill" />
+             <CaretDown weight="fill" className="transform rotate-180 duration-300 group-hover:rotate-3" />
           </li>
-          <li className="flex items-center font-extralight hover:font-normal transition-all cursor-pointer">
+          <li className="flex  items-center font-extralight duration-300 group hover:font-normal transition-all cursor-pointer">
             More
-            <CaretDown weight="fill" />
+             <CaretDown weight="fill" className="transform rotate-180 duration-300 group-hover:rotate-3" />
           </li>
         </ul>
 

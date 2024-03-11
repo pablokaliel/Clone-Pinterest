@@ -12,7 +12,7 @@ interface ImageGridProps {
 
 function ImageGrid({ photos }: ImageGridProps) {
   return (
-    <div className="px-[102px] max-md:px-4">
+    <div className="px-[102px] bg-white max-md:px-4">
       <div className="mt-4 columns-5 max-md:columns-2">
         {photos.map((image, index) => (
           <div key={index} className="mb-4 group overflow-hidden relative">
